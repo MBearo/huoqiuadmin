@@ -1,21 +1,38 @@
 <template>
-    <div>
-        <div class="flex">
-            <h3 class="flex-1">新闻列表</h3>
-            <div class="flex-0">
-                <el-button @click="newarticle">新建文章</el-button>
-            </div>
-        </div>
-
-        <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="date" label="日期" width="180">
-            </el-table-column>
-            <el-table-column prop="name" label="姓名" width="180">
-            </el-table-column>
-            <el-table-column prop="address" label="地址">
-            </el-table-column>
-        </el-table>
+  <div>
+    <div class="flex">
+      <h3 class="flex-1">新闻列表</h3>
+      <div class="flex-0">
+        <el-button @click="newarticle" type="primary">新建文章</el-button>
+      </div>
     </div>
+
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="id" width="50">
+      </el-table-column>
+      <el-table-column label="背景图" width="180">
+        <template slot-scope="scope">
+          <img :src="scope.row.banner" alt="" style="width:180px;">
+        </template>
+      </el-table-column>
+      <el-table-column prop="title" label="文章标题">
+      </el-table-column>
+      <el-table-column prop="classify" label="分类">
+      </el-table-column>
+      <el-table-column prop="time" label="创建时间">
+      </el-table-column>
+      <el-table-column prop="like" label="喜欢数">
+      </el-table-column>
+      <el-table-column prop="inventory" label="库存">
+      </el-table-column>
+      <el-table-column prop="goods" label="商品名称">
+      </el-table-column>
+      <el-table-column prop="freight" label="邮费">
+      </el-table-column>
+      <el-table-column prop="uid" label="作者">
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
@@ -28,31 +45,16 @@ export default {
       tableData: []
     };
   },
+  created() {
+    this.refresh();
+  },
   methods: {
     refresh() {
-      axios
-        .get(this.$url + "Graduation/InsertData", {
-          params: {}
-        })
+      this.$axios
+        .get(this.$url2 + "s_newslist.php")
         .then(result => {
           console.log(result.data);
-          if (result.data.errorcode == 0) {
-            this.$message({
-              showClose: true,
-              message: "上传成功",
-              type: "success"
-            });
-            this.form.title = "";
-            this.form.content = "";
-            this.imgUrl = "";
-            this.categoryActive = "";
-          } else {
-            this.$message({
-              showClose: true,
-              message: result.data.msg,
-              type: "error"
-            });
-          }
+          this.tableData = result.data.data.list;
         })
         .catch(_ => {
           this.$message({
@@ -62,8 +64,8 @@ export default {
           });
         });
     },
-    newarticle(){
-        this.$router.push('/NewArticle')
+    newarticle() {
+      this.$router.push("/NewArticle");
     }
   }
 };

@@ -7,16 +7,16 @@
       </el-form-item>
 
       <el-form-item label="单价">
-        <el-input v-model="form.price"></el-input>
+        <el-input-number v-model="form.price"></el-input-number>
       </el-form-item>
-      <el-form-item label="分类">
+      <!-- <el-form-item label="分类">
         <el-input v-model="form.classify"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="运费">
-        <el-input v-model="form.freight"></el-input>
+        <el-input-number v-model="form.freight"></el-input-number>
       </el-form-item>
       <el-form-item label="库存">
-        <el-input v-model="form.inventory"></el-input>
+        <el-input-number v-model="form.inventory"></el-input-number>
       </el-form-item>
       <el-form-item label="商品名">
         <el-input v-model="form.goods"></el-input>
@@ -25,11 +25,14 @@
         <el-upload class="flex-0" style="margin:10px 0;" action="none" :show-file-list="false" :before-upload="beforeUpload" list-type="picture">
           <el-button type="primary" :loading="uploadLoad">{{uploadText}}</el-button>
         </el-upload>
-        <img :src="imgUrl" alt="">
+        <img :src="imgUrl" alt="" style="width:100%;">
+      </el-form-item>
+      <el-form-item label="文章内容">
+        <quill-editor v-model="content" ref="myQuillEditor" :options="editorOption">
+        </quill-editor>
       </el-form-item>
     </el-form>
-    <quill-editor v-model="content" ref="myQuillEditor" :options="editorOption">
-    </quill-editor>
+    <el-button @click="submit" type="primary">提交</el-button>
   </div>
 </template>
 
@@ -45,6 +48,8 @@ export default {
   },
   data() {
     return {
+      uploadLoad: false,
+      uploadText: "选择图片",
       content: "",
       editorOption: {
         modules: {
@@ -56,7 +61,8 @@ export default {
           ]
         }
       },
-      imgUrl:''
+      imgUrl: "",
+      form: {}
     };
   },
   computed: {},
@@ -88,6 +94,7 @@ export default {
       }
 
       this.uploadText = "上传中";
+      this.uploadLoad = true;
 
       let fd = new FormData();
       fd.append("file", file);
@@ -116,6 +123,7 @@ export default {
             });
           }
           this.uploadText = "选择图片";
+          this.uploadLoad = false;
         })
         .catch(_ => {
           this.$message({
@@ -125,6 +133,48 @@ export default {
           });
         });
       return false;
+    },
+    submit() {
+      this.$axios
+        .post(
+          this.$url + "Graduation/AddArticle",
+          this.$qs.stringify({
+            title: this.form.title,
+            content: this.content,
+            banner: this.imgUrl,
+            price: this.form.price,
+            classify:'1',
+            like:'0',
+            freight:this.form.freight,
+            inventory:this.form.inventory,
+            goods:this.form.goods,
+            uid:'0'
+          })
+        )
+        .then(result => {
+          console.log(result.data);
+          if (result.data.errorcode == 0) {
+            this.$message({
+              showClose: true,
+              message: "上传成功",
+              type: "success"
+            });
+            
+          } else {
+            this.$message({
+              showClose: true,
+              message: result.data.msg,
+              type: "error"
+            });
+          }
+        })
+        .catch(_ => {
+          this.$message({
+            showClose: true,
+            message: "请检查网络连接",
+            type: "error"
+          });
+        });
     }
   }
 };

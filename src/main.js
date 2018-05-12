@@ -8,7 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import store from './vuex'
 import Vuex from 'vuex'
 import './style/init.css'
-
+import axios from 'axios'
+import urls from './vuex/urls'
+import qs from 'qs'
 
 Vue.config.productionTip = false
 Vue.use(Vuex)

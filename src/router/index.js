@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import ArticleList from '@/components/ArticleList'
 import UserList from '@/components/UserList'
 import NewArticle from '@/components/NewArticle'
+import NewUser from '@/components/NewUser'
 
 Vue.use(Router)
 
@@ -27,6 +28,11 @@ export default new Router({
         path:'NewArticle',
         name: 'NewArticle',
         component:NewArticle
+      },
+      {
+        path:'NewUser',
+        name: 'NewUser',
+        component:NewUser
       }]
     }
   ]
