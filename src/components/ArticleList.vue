@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="flex">
-      <h3 class="flex-1">新闻列表</h3>
+      <h3 class="flex-1">文章列表</h3>
       <div class="flex-0">
         <el-button @click="newarticle" type="primary">新建文章</el-button>
       </div>
     </div>
 
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%" v-loading="load">
       <el-table-column prop="id" label="id" width="50">
       </el-table-column>
       <el-table-column label="背景图" width="180">
@@ -42,7 +42,8 @@ import urls from "../vuex/urls";
 export default {
   data() {
     return {
-      tableData: []
+      tableData: [],
+      load:true
     };
   },
   created() {
@@ -55,6 +56,7 @@ export default {
         .then(result => {
           console.log(result.data);
           this.tableData = result.data.data.list;
+          this.load=false
         })
         .catch(_ => {
           this.$message({

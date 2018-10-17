@@ -2,7 +2,7 @@
   <div class="hello">
     <div class="menu flex-0">
       <div class="title flex-1">
-        标题
+        优选商城
       </div>
       <div class="flex-0">
         用户名
@@ -11,7 +11,7 @@
 
     <div class="flex-1 flex">
       <el-menu :default-active="activeIndex" class="flex-0"  @select="handleSelect" :router="true">
-        <el-menu-item index="articlelist" >新闻管理</el-menu-item>
+        <el-menu-item index="articlelist" >文章管理</el-menu-item>
         <el-menu-item index="userlist" >用户管理</el-menu-item>
       </el-menu>
       <div class="cont flex-1">

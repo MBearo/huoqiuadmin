@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%" v-loading="load">
       <el-table-column prop="id" label="id" width="50">
       </el-table-column>
       <el-table-column label="头像" width="100">
@@ -45,7 +45,8 @@ import urls from "../vuex/urls";
 export default {
   data() {
     return {
-      tableData: []
+      tableData: [],
+      load:true
     };
   },
   created() {
@@ -58,6 +59,7 @@ export default {
         .then(result => {
           console.log(result.data);
           this.tableData = result.data.data.list;
+          this.load=false
         })
         .catch(_ => {
           this.$message({
